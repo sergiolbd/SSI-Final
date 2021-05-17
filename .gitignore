@@ -1,0 +1,6 @@
+.vscode
+dist
+docs
+node_modules
+tests
+package-lock.json
