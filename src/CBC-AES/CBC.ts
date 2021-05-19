@@ -12,6 +12,7 @@ export class CBC extends AES {
 
     this.texto = text_;
 
+
     for (let i = 0; i < text_.length; i++) {
       this.textBlock[i] = this.setMatrix(text_[i]);
     }
@@ -118,12 +119,12 @@ export class CBC extends AES {
     console.log('\nEntrada:');
     this.printKey();
     console.log(`IV: ${this.transpose(this.IV)}`);
-    for (let i = 0; i < this.textBlock.length; i++) {
+    for (let i = 0; i < this.textBlock.length-1; i++) {
       console.log(`Bloque Texto Original ${i}:  ${this.transpose(this.textBlock[i])}`); 
     }
 
     console.log('\nSalida');
-    for (let i = 0; i < this.CipherBlock.length; i++) {
+    for (let i = 0; i < this.CipherBlock.length-1; i++) {
       console.log(`Bloque Texto Cifrado ${i}:  ${this.CipherBlock[i]}`); 
     }
   }

@@ -36,15 +36,15 @@ export class promptCBC {
       default: '0x00112233445566778899aabbccddeeff',
     });
   
-    const textBlock2 = await inquirer.prompt({
-      type: 'input',
-      name: 'text',
-      message: 'Input original block 2: ',
-      default: '0x00000000000000000000000000000000',
-    });
+    // const textBlock2 = await inquirer.prompt({
+    //   type: 'input',
+    //   name: 'text',
+    //   message: 'Input original block 2: ',
+    //   default: '0x00000000000000000000000000000000',
+    // });
   
-    if (key['key'] != '' && textBlock['text'] != '' && textBlock2['text'] != '' && IV['IV'] != '') {
-      let Blocktext = [textBlock['text'], textBlock2['text']]
+    if (key['key'] != '' && textBlock['text'] != '' &&  IV['IV'] != '') {
+      let Blocktext = [textBlock['text'], '0x00000000000000000000000000000000']
       const output = new CBC(key['key'], Blocktext, IV['IV']);
       output.encryptionCBC();
     }
