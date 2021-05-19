@@ -28,13 +28,7 @@ export class promptFeigeFiatShamir {
       type: 'number',
       name: 's',
       message: 'Input s: ',
-      default: [16, 2],
-    });
-    const k = await inquirer.prompt({
-      type: 'number',
-      name: 'k',
-      message: 'Input k: ',
-      default: 2,
+      default: 16,
     });
     const r = await inquirer.prompt({
       type: 'number',
@@ -52,11 +46,11 @@ export class promptFeigeFiatShamir {
       type: 'number',
       name: 'a',
       message: 'Input a: ',
-      default: [0,1],
+      default: 1,
     });
   
-    if (p['p'] != '' && q['q'] != '' && s['s'] != '' && k['k'] != '') {
-      const output = new FiatFeigeShamir(p['p'], q['q'], s['s'], k['k'], r['r'], signo['signo'], a['a']);
+    if (p['p'] != '' && q['q'] != '' && s['s'] != '' ) {
+      const output = new FiatFeigeShamir(p['p'], q['q'], s['s'], r['r'], signo['signo'], a['a']);
       output.print();
     }
   }

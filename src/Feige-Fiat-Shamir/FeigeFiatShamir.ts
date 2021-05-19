@@ -6,28 +6,25 @@ export class FiatFeigeShamir {
   private p: number = 0;
   private q: number = 0;
   private n: number = 0;
-  private s: number[] = []; // Identificación secreta de A
-  private v: number[] = []; // Identificación pública de A
+  private s: number = 0; // Identificación secreta de A
+  private v: number = 0; // Identificación pública de A
   private r: number = 0; //Entero aleatorio
   private signo: number = 0; // Signo aleatorio
   private x: number = 0; // Testigo
-  private a: number[] = []; // bits B envía A
+  private a: number = 0; // bits B envía A
   private y: number = 0; // Respuesta A envía a B
   private k: number = 0;
-  constructor(p_: number, q_: number, s_: number[], k_: number, r_ :number, signo_: number, a_: number[]) {
+  constructor(p_: number, q_: number, s_: number, r_ :number, signo_: number, a_: number) {
     LehmanPeralta(p_) === true ? this.p = p_ : console.log(chalk.bold.red(` ERROR --> p = ${p_} no es primo`));
     LehmanPeralta(q_) === true ? this.q = q_ : console.log(chalk.bold.red(` ERROR --> q = ${q_} no es primo`));
 
     this.n = this.p * this.q;
-    this.k = k_;
 
-    s_.forEach((value) => {
-      if(value > 0 && value < this.n) {
-        this.s.push(value);
-      } else {
-        console.log(chalk.bold.red(` ERROR --> s = ${s_} debe estar entre 0 y ${this.n}`));
-      }
-    });
+    if(s_ > 0 && s_ < this.n) {
+      this.s = s_;
+    } else {
+      console.log(chalk.bold.red(` ERROR --> s = ${s_} debe estar entre 0 y ${this.n}`));
+    }
 
     // Identificación pública de A
     this.publicA();
@@ -40,19 +37,16 @@ export class FiatFeigeShamir {
     this.x = (this.signo * Math.pow(this.r, 2)) % this.n;
 
     // Reto: B envía a A
-    a_.forEach((value) => {
-      if (value === 0 || value === 1) {
-        this.a.push(value);
-      } else {
-        console.log(chalk.bold.red(` ERROR --> a = ${value} no permitido`));
-      }
-    });
 
-    let result = 1;
-    // // Respuesta: A envía a B
-    for (let i = 0; i < k_; i++) {
-      result *= Math.pow(this.s[i], this.a[i]);
+    if (a_ === 0 || a_ === 1) {
+      this.a = a_;
+    } else {
+      console.log(chalk.bold.red(` ERROR --> a = ${a_} no permitido`));
     }
+
+    // Respuesta: A envía a B
+    const result = Math.pow(this.s, this.a);
+
     this.y = (this.r * result) % this.n;
 
   }
@@ -61,20 +55,17 @@ export class FiatFeigeShamir {
    * Identificación pública de A
    */
   publicA() {
-    this.s.forEach((value) => {
-      this.v.push((Math.pow(value, 2) % this.n));
-    })
+    this.v = ((Math.pow(this.s, 2) % this.n));
   }
 
   // Verificación
   check() {
-    const y2 = (Math.pow(this.y, 2)) % this.n;
-    let result = 1;
-    for (let i = 0; i < this.k; i++) {
-      result *= (Math.pow(this.v[i], this.a[i]));
-    }
-    const output = ((this.x * result) % this.n);
-    if (y2 === output) {
+    let y2 = (Math.pow(this.y, 2)) % this.n;
+    const result = (Math.pow(this.v, this.a));
+
+    let output = ((this.x * result) % this.n);
+
+    if (y2 === output || -1*y2 === output || y2 === output*-1) {
       return true;
     } else {
       return false;
